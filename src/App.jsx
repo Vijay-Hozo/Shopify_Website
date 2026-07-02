@@ -6,6 +6,7 @@ import "./App.css";
 import Navbar from "./Components/Navbar";
 import ProductPage from "./Components/ProductPage";
 import Footer from "./Components/Footer";
+import Cart from "./Components/Cart";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -26,6 +27,7 @@ function App() {
       {/* <Navbar cartCount={cart.length} /> */}
       <ProductPage addToCart={addToCart} />
       <Footer />
+      <Cart />
     </>
   );
 }
