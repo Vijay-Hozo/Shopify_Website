@@ -9,14 +9,14 @@ import Footer from "./Components/Footer";
 import Cart from "./Components/Cart";
 
 function App() {
-  const [cart, setCart] = useState([]);
+  // const [cart, setCart] = useState([]);
 
-  const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
-  };
+  // const addToCart = (product) => {
+  //   setCart((prevCart) => [...prevCart, product]);
+  // };
 
-   console.log(cart);
-   console.log("cart length :",cart.length);
+  //  console.log(cart);
+  //  console.log("cart length :",cart.length);
 
   // initially, the cart is empty, so we can display a message or an empty cart icon. When a product is added to the cart, we can update the cart state and display the number of items in the cart.
 
