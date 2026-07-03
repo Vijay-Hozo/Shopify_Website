@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 // {addToCart} is a prop that is passed from the parent component (App.jsx) to the child component (ProductPage.jsx). It is a function that allows the ProductPage component to add products to the cart in the parent component's state. When a user clicks the "Add to Cart" button for a product, the addToCart function is called with the product as an argument, which updates the cart state in App.jsx.
-const ProductPage = () => {
+const ProductPage = ({ addToCart,cart }) => {
+  // reduce - single value from an array. Here, we are using reduce to calculate the total quantity of items in the cart by summing up the quantity of each item in the cart array. The result is stored in the cartCount variable, which can be used to display the number of items in the cart in the Navbar component.
+  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
-  const [cart, setCart] = useState([]);
+  // const [cart, setCart] = useState([]);
   const products = [
     {
       id: 1,
@@ -64,13 +67,13 @@ const ProductPage = () => {
     },
   ];
 
-  const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
-  };
+  // const addToCart = (product) => {
+  //   setCart((prevCart) => [...prevCart, product]);
+  // };
 
   return (
     <div>
-      <Navbar cartCount={cart.length} />
+      <Navbar cartCount={cartCount} />
       <section className="bg-gray-100 px-3 py-5">
         <h1 className="text-xl font-semibold text-center mb-4">Our Products</h1>
 
@@ -96,6 +99,7 @@ const ProductPage = () => {
           })}
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

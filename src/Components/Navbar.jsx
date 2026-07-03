@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ cartCount }) => {
+  const navigate = useNavigate();
   return (
     <nav className = "bg-blue-500 text-white py-4">
       <div className = "flex justify-between items-center px-3">
@@ -14,7 +16,7 @@ const Navbar = ({ cartCount }) => {
         </ul>
 
 
-        <button className = "bg-gray-100 text-blue-800 font-semibold py-1 px-2 rounded-lg">
+        <button onClick={() => navigate("/cart")} className = "bg-gray-100 text-blue-800 font-semibold py-1 px-2 rounded-lg">
             Cart : {cartCount}
         </button> 
       </div>
