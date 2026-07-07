@@ -1,37 +1,18 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import {
+  increaseQuantity,
+  decreaseQuantity,
+  clearItem,
+} from "../features/cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const Cart = ({ cart, setCart }) => {
-  console.log("cart in cart.jsx :", cart);
-  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+const Cart = () => {
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.items);
 
-  const removeItem = (id) => {
-    setCart((prev) =>
-      prev
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const increaseItem = (id) => {
-    setCart((prev) =>
-      prev.map((item) => {
-        if (item.id === id) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      })
-    );
-  };
-
-  const clearItem = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <div className="min-h-dvh">
@@ -53,7 +34,7 @@ const Cart = ({ cart, setCart }) => {
                   key={index}
                   className="bg-white p-2 rounded-lg shadow-md flex flex-col items-center gap-3 cursor-pointer "
                 >
-                  <img src={item.image} alt={item.name} className = "h-[250px]" />
+                  <img src={item.image} alt={item.name} className="h-[250px]" />
                   <h2> {item.name} </h2>
                   <p> {item.price} </p>
 
@@ -61,21 +42,30 @@ const Cart = ({ cart, setCart }) => {
                     <p> Quantity: {item.quantity} </p>
                   </div>
 
-                  <div> 
+                  <div>
                     <p> Total Price: ${totalPrice.toFixed(2)} </p>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => removeItem(item.id)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                    <button
+                      onClick={() => dispatch(decreaseQuantity(item.id))}
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
                       Decrease Quantity
                     </button>
 
-                    <button onClick={() => increaseItem(item.id)} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                    <button
+                      onClick={() => dispatch(increaseQuantity(item.id))}
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                    >
                       Increase Quantity
                     </button>
                   </div>
 
                   <div>
-                    <button onClick={() => clearItem(item.id)} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors">
+                    <button
+                      onClick={() => dispatch(clearItem(item.id))}
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                    >
                       Remove from Cart
                     </button>
                   </div>
