@@ -7,6 +7,7 @@ import {
   clearItem,
 } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Button from "./Button";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -46,12 +47,12 @@ const Cart = () => {
                     <p> Total Price: ${totalPrice.toFixed(2)} </p>
                   </div>
                   <div className="flex gap-2">
-                    <button
+                    <Button
                       onClick={() => dispatch(decreaseQuantity(item.id))}
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                     >
                       Decrease Quantity
-                    </button>
+                    </Button>
 
                     <button
                       onClick={() => dispatch(increaseQuantity(item.id))}
