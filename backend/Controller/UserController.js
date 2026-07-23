@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
       role,
     });
 
-    const token = jwt.sign({ id: newuser._id }, "secret_key", {
+    const token = jwt.sign({ id: newuser._id, role: newuser.role }, "secret_key", {
       expiresIn: "8h",
     });
 
@@ -92,7 +92,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id }, "secret_key", { expiresIn: "8h" });
+    const token = jwt.sign({ id: user._id, role: user.role }, "secret_key", { expiresIn: "8h" });
 
     return res.status(200).json({
       success: true,
