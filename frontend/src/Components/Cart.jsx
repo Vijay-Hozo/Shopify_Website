@@ -7,7 +7,7 @@ import {
   clearItem,
 } from "../features/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "./Button";
+// import Button from "./Button";
 
 const Cart = () => {
   const dispatch = useDispatch();

@@ -1,16 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import { Button } from "@/components/ui/button";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuGroup,
+//   DropdownMenuItem,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Navbar = () => {
       <div className="flex justify-between items-center px-3">
         <h1 className="font-bold uppercase text-xl">Shopify</h1>
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="outline" />}>
             Open
           </DropdownMenuTrigger>
@@ -39,9 +39,8 @@ const Navbar = () => {
               <DropdownMenuItem>Subscription</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
 
-        
         <ul className="flex gap-4 font-semibold text-lg cursor-pointer ">
           <li className="hover:underline transition duration-300 hover:scale-125 ">
             Home
@@ -57,12 +56,18 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <button
-          onClick={() => navigate("/cart")}
-          className="bg-gray-100 text-blue-800 font-semibold py-1 px-2 rounded-lg"
-        >
-          Cart : {cartCount}
-        </button>
+        <div>
+          <button onClick={() => navigate("/signup")} className="bg-gray-100 text-blue-800 font-semibold py-1 px-2 rounded-lg mr-2">
+            Sign Up
+          </button>
+
+          <button
+            onClick={() => navigate("/cart")}
+            className="bg-gray-100 text-blue-800 font-semibold py-1 px-2 rounded-lg"
+          >
+            Cart : {cartCount}
+          </button>
+        </div>
       </div>
     </nav>
   );
