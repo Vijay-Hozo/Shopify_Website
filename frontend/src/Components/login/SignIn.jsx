@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../features/user/userSlice";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,8 +22,15 @@ const SignIn = () => {
       console.log("Response: ", res.data.token);
       console.log("Response: ", res.data.user);
       if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // localStorage.setItem("token", res.data.token);
+        // localStorage.setItem("user", JSON.stringify(res.data.user));
+
+        dispatch(
+          loginSuccess({
+            user: res.data.user,
+            token: res.data.token,
+          }),
+        );
       }
       window.alert("User logged in successfully");
       navigate("/");

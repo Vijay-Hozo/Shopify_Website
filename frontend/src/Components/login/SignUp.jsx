@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../features/user/userSlice";
+
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,12 +27,19 @@ const SignUp = () => {
       });
 
       console.log("Response: ", response.data.token);
-      if(response.data.token){
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("user", JSON.stringify(response.data.newuser));
+      if (response.data.token) {
+        // localStorage.setItem("token", response.data.token);
+        // localStorage.setItem("user", JSON.stringify(response.data.newuser));
+
+        dispatch(
+          loginSuccess({
+            user: response.data.newuser,
+            token: response.data.token,
+          }),
+        );
       }
       window.alert("User registered successfully");
-    //   navigate("/");
+        navigate("/");
     } catch (err) {
       console.log(err);
     }

@@ -1,21 +1,30 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { logout } from "../features/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
 
-  const token = localStorage.getItem("token");
-  console.log("Token in Navbar: ", token);
-
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useSelector((state) => state.user);
   console.log("User in Navbar: ", user);
+
+  // const token = localStorage.getItem("token");
+  // console.log("Token in Navbar: ", token);
+
+  // const user = JSON.parse(localStorage.getItem("user"));
+  // console.log("User in Navbar: ", user);
 
   // setItem, getItem, removeItem - localStorage
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("user");
+
+    dispatch(logout());
     window.alert("User logged out successfully");
     navigate("/signin");
   };
