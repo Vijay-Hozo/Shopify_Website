@@ -97,7 +97,7 @@ const ProductPage = () => {
           {products.map((prod) => {
             return (
               <div
-                key={prod.id}
+                key={prod._id || prod.id}
                 className="bg-white p-2 rounded-lg shadow-md flex flex-col items-center gap-3 cursor-pointer hover:scale-105 transition duration-300"
               >
                 <img src={prod.image} alt={prod.title} className="h-[230px]" />

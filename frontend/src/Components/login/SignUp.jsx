@@ -26,20 +26,17 @@ const SignUp = () => {
         password,
       });
 
-      console.log("Response: ", response.data.token);
+      const userPayload = response.data.user || response.data.newuser;
       if (response.data.token) {
-        // localStorage.setItem("token", response.data.token);
-        // localStorage.setItem("user", JSON.stringify(response.data.newuser));
-
         dispatch(
           loginSuccess({
-            user: response.data.newuser,
+            user: userPayload,
             token: response.data.token,
           }),
         );
       }
       window.alert("User registered successfully");
-        navigate("/");
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -80,19 +77,20 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="w-full bg-blue-600 text-white p-2 rounded ">
+        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-colors">
           Sign Up
         </button>
-        <button className="w-full mt-3 bg-green-600 text-white p-2 rounded ">
+        <button type="button" className="w-full mt-3 bg-green-600 text-white p-2 rounded hover:bg-green-700 transition-colors">
           Sign Up with Google
         </button>
 
         <h2 className="text-center my-3">or</h2>
-        <h2 className="">Existing User?</h2>
+        <h2 className="mb-2 text-sm text-gray-600">Existing User?</h2>
 
         <button
+          type="button"
           onClick={() => navigate("/signin")}
-          className="w-full bg-blue-600 text-white p-2 rounded "
+          className="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 transition-colors"
         >
           Login
         </button>

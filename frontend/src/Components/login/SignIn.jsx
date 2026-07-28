@@ -65,19 +65,20 @@ const SignIn = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="w-full bg-blue-600 text-white p-2 rounded ">
+        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-colors">
           Sign In
         </button>
-        <button className="w-full mt-3 bg-green-600 text-white p-2 rounded ">
+        <button type="button" className="w-full mt-3 bg-green-600 text-white p-2 rounded hover:bg-green-700 transition-colors">
           Sign In with Google
         </button>
 
         <h2 className="text-center my-3">or</h2>
-        <h2 className="">New User?</h2>
+        <h2 className="mb-2 text-sm text-gray-600">New User?</h2>
 
         <button
+          type="button"
           onClick={() => navigate("/signup")}
-          className="w-full bg-blue-600 text-white p-2 rounded "
+          className="w-full bg-gray-600 text-white p-2 rounded hover:bg-gray-700 transition-colors"
         >
           Sign Up
         </button>

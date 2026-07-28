@@ -1,31 +1,33 @@
 const jwt = require('jsonwebtoken');
 
-const adminAuth = async(req,res,next) => {
-    const token = req.header("Authorization").split(" ")[1];
+const adminAuth = async (req, res, next) => {
+  const authHeader = req.header("Authorization");
 
-    if(!token){
-        return res.status(400).json({
-            status:"failure",
-            message:"Token not found"
-        })
-    }
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      status: "failure",
+      message: "Access denied. No token provided.",
+    });
+  }
 
-    try{
-        const decoded = jwt.verify(token,"secret_key");
-        req.user = decoded;
-        if(req.user.role !== "admin"){
-            return res.status(403).json({
-                status:"failure",
-                message:"Access denied. Admin only."
-            })
-        }
-        next();
-    }catch(err){
-        res.status(400).json({
-            status:"failure",
-            message:"Token is invalid"
-        })
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret_key");
+    req.user = decoded;
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        status: "failure",
+        message: "Access denied. Admin only.",
+      });
     }
-}
+    next();
+  } catch (err) {
+    res.status(401).json({
+      status: "failure",
+      message: "Token is invalid or expired",
+    });
+  }
+};
 
 module.exports = adminAuth;

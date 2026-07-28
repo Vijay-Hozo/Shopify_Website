@@ -27,15 +27,16 @@ const Cart = () => {
         ) : (
           <div className="grid grid-cols-4 gap-4">
             {cart.map((item, index) => {
+              const itemId = item._id || item.id;
               const unitPrice = Number(String(item.price).replace("$", ""));
               const totalPrice = unitPrice * item.quantity;
 
               return (
                 <div
-                  key={index}
+                  key={itemId || index}
                   className="bg-white p-2 rounded-lg shadow-md flex flex-col items-center gap-3 cursor-pointer "
                 >
-                  <img src={item.image} alt={item.name} className="h-[250px]" />
+                  <img src={item.image} alt={item.title || item.name} className="h-[250px]" />
                   <h2> {item.title} </h2>
                   <p> {item.price} </p>
 
@@ -48,14 +49,14 @@ const Cart = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => dispatch(decreaseQuantity(item.id))}
+                      onClick={() => dispatch(decreaseQuantity(itemId))}
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                     >
                       Decrease Quantity
                     </button>
 
                     <button
-                      onClick={() => dispatch(increaseQuantity(item.id))}
+                      onClick={() => dispatch(increaseQuantity(itemId))}
                       className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
                     >
                       Increase Quantity
@@ -64,7 +65,7 @@ const Cart = () => {
 
                   <div>
                     <button
-                      onClick={() => dispatch(clearItem(item.id))}
+                      onClick={() => dispatch(clearItem(itemId))}
                       className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
                     >
                       Remove from Cart
