@@ -172,6 +172,27 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// get user by id
+// GET LOGGED-IN USER PROFILE (GET /me)
+const getMe = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id).select("-password");
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-module.exports = { registerUser, loginUser, updateUser, deleteUser };
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch user profile",
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, updateUser, deleteUser, getMe };

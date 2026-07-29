@@ -31,10 +31,10 @@ const SignUp = () => {
         dispatch(
           loginSuccess({
             user: userPayload,
-            token: response.data.token,
           }),
         );
       }
+      localStorage.setItem("token", response.data.token);
       window.alert("User registered successfully");
       navigate("/");
     } catch (err) {

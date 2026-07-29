@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/user/userSlice";
@@ -7,10 +7,12 @@ import { loginSuccess } from "../../features/user/userSlice";
 const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+
+  const returnTo = searchParams.get("returnTo") || "/";
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,23 +21,20 @@ const SignIn = () => {
         email,
         password,
       });
-      console.log("Response: ", res.data.token);
-      console.log("Response: ", res.data.user);
-      if (res.data.token) {
-        // localStorage.setItem("token", res.data.token);
-        // localStorage.setItem("user", JSON.stringify(res.data.user));
 
+      if (res.data.token) {
         dispatch(
           loginSuccess({
             user: res.data.user,
             token: res.data.token,
-          }),
+          })
         );
       }
       window.alert("User logged in successfully");
-      navigate("/");
+      navigate(returnTo, { replace: true });
     } catch (err) {
       console.log(err);
+      window.alert(err.response?.data?.message || "Login failed");
     }
   };
 

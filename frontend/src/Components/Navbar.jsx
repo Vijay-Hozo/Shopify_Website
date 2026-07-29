@@ -10,7 +10,9 @@ const Navbar = () => {
   
 
   const { user } = useSelector((state) => state.user);
+  const token = useSelector((state) => state.user.token);
   console.log("User in Navbar: ", user);
+  console.log("Token in Navbar: ", token);
 
   // const token = localStorage.getItem("token");
   // console.log("Token in Navbar: ", token);
@@ -55,7 +57,7 @@ const Navbar = () => {
           {user ? (
             <button className="bg-gray-100 text-blue-800 font-semibold py-1 px-2 rounded-lg mr-2">
               {" "}
-              {user.name}
+              {user.name || "User"} {/* Display the user's name */}
               {/* profile */}
             </button>
           ) : (
