@@ -1,12 +1,7 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
 import "./App.css";
-import Navbar from "./Components/Navbar";
 import ProductPage from "./Components/ProductPage";
-import Footer from "./Components/Footer";
 import Cart from "./Components/Cart";
+import AdminProducts from "./Components/AdminProducts";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./Components/login/SignUp";
 import SignIn from "./Components/login/SignIn";
@@ -15,6 +10,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { loginSuccess, logout } from "./features/user/userSlice";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import AdminRoute from "./Components/AdminRoute";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,6 +47,7 @@ function App() {
 
     fetchUserProfile();
   }, [dispatch]);
+
   return (
     <>
       <BrowserRouter>
@@ -63,6 +60,10 @@ function App() {
             <Route path="/cart" element={<Cart />} />
           </Route>
 
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/products" element={<AdminProducts />} />
+          </Route>
+          
         </Routes>
       </BrowserRouter>
     </>

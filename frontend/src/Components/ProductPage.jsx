@@ -3,121 +3,143 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
-import axios from "axios"
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const productImage = "https://stock.adobe.com/search?k=end+of+year+sale+banners"
+  const [loading, setLoading] = useState(true);
 
-  const cart = useSelector((state) => state.cart.items);
+  const { user, token } = useSelector((state) => state.user);
+  const isAdmin = user?.role === "admin";
+  const userToken = token || localStorage.getItem("token");
 
-  // const products = [
-  //   {
-  //     id: 1,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/LjFB6lsscXfeLNIfhM5v5P4AxB9596G4oUciTxZyfoE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMzEv/MjAyLzI5MC9zbWFs/bC9tb2Rlcm4td2hp/dGUtc2xpbS13aXJl/bGVzcy1oZWFkcGhv/bmVzLXdpdGgtc2ls/dmVyLWRldGFpbHMt/cGhvdG8uanBn",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/aSdZ2e5S0E8g_aUn-KxgBmrkMpf7V5IqO1D1w3OhULQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNjgv/NzY3LzEzOC9zbWFs/bC93aXJlbGVzcy1o/ZWFkcGhvbmVzLW9u/LW5ldXRyYWwtYmFj/a2dyb3VuZC1tb2Rl/cm4tYXVkaW8tdGVj/aG5vbG9neS1mb3It/bXVzaWMtYW5kLXBv/ZGNhc3RzLWNvbWZv/cnRhYmxlLWxpc3Rl/bmluZy1leHBlcmll/bmNlLXBob3RvLmpw/Zw",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/d81cAP2qU4OW14YGuTa-2kAyYQ4xDOT2o9G75aYzhQE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE2/MDkwODEyMTkwOTAt/YTZkODFkMzA4NWJm/P2ZtPWpwZyZxPTYw/Jnc9MzAwMCZhdXRv/PWZvcm1hdCZmaXQ9/Y3JvcCZpeGxpYj1y/Yi00LjEuMCZpeGlk/PU0zd3hNakEzZkRC/OE1IeHpaV0Z5WTJo/OE1UaDhmR2hsWVdS/d2FHOXVaWE44Wlc1/OE1IeDhNSHg4ZkRB/PQ",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/RRlhXg3iN0FTwcTFemU-w49ZUQTmE-BxufTIu7VEbwQ/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNDcv/MTE4LzE3My9zbWFs/bC9zaW5nbGUtYmxh/Y2stYmx1ZXRvb3Ro/LXdpcmVsZXNzLWhl/YWRwaG9uZXMtcGhv/dG8uanBn",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/5JajwzYL89sSr9w8axXDir6Nbc7KNj_YR7gdG7zGo_Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMzkv/MjI3LzExMi9zbWFs/bC93aXJlbGVzcy1o/ZWFkcGhvbmVzLWFu/ZC1oZWFkcGhvbmVz/LXdpdGgtd2lyZXMt/cGhvdG8uSlBH",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/5JajwzYL89sSr9w8axXDir6Nbc7KNj_YR7gdG7zGo_Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMzkv/MjI3LzExMi9zbWFs/bC93aXJlbGVzcy1o/ZWFkcGhvbmVzLWFu/ZC1oZWFkcGhvbmVz/LXdpdGgtd2lyZXMt/cGhvdG8uSlBH",
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/p69wpFCwDzQmFRGqq8B0vdxKOxW0SXNt7-7zh0qNtRA/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTIy/NTg2MzE4NS9waG90/by93aXJlbGVzcy1o/ZWFkcGhvbmVzLW9u/LWJyaWdodC1iYWNr/Z3JvdW5kLmpwZz9z/PTYxMng2MTImdz0w/Jms9MjAmYz1ZX2Iw/clM2X0dRVFg3MkJJ/VGdUZkt5V0ZjNTg3/ZkNrWWQzUnBhUFl1/azNzPQ",
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Wireless Headphones",
-  //     price: "$10.19",
-  //     image:
-  //       "https://imgs.search.brave.com/sGdmydw5JKmLHaB0WrXTwVuoiLocbuewZhdW3ZSn53Y/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNDIv/NjQxLzU4OS9zbWFs/bC93aXJlbGVzcy1o/ZWFkcGhvbmVzLW9u/LXdoaXRlLXBob3Rv/LmpwZw",
-  //   },
-  // ];
-
-
-  useEffect(()=>{
-    console.log("Fetching products from backend...");
-    const fetchProducts = async () => {
-      try{
-        console.log("Fetching products...");
-        const resp = await axios.get("http://localhost:3000/products");
-        console.log("Products: ", resp);
-        setProducts(resp.data.products);
-      }catch(err){
-        console.log(err)
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const resp = await axios.get("http://localhost:3000/products");
+      if (resp.data.success) {
+        setProducts(resp.data.products || []);
+      } else {
+        setProducts(resp.data || []);
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    // call the loader
+  };
+
+  useEffect(() => {
     fetchProducts();
-  },[])
+  }, []);
+
+  const handleDeleteProduct = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      const res = await axios.delete(`http://localhost:3000/products/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      if (res.data.success) {
+        window.alert("Product deleted successfully");
+        fetchProducts();
+      }
+    } catch (err) {
+      console.error(err);
+      window.alert(err.response?.data?.message || "Failed to delete product");
+    }
+  };
+
   return (
-    <div>
-      <Navbar  />
-      <section className="bg-gray-100 px-3 py-5">
-        <h1 className="text-xl font-semibold text-center mb-4">Our Products</h1>
-
-        <div className="grid grid-cols-5 gap-4">
-          {products.map((prod) => {
-            return (
-              <div
-                key={prod._id || prod.id}
-                className="bg-white p-2 rounded-lg shadow-md flex flex-col items-center gap-3 cursor-pointer hover:scale-105 transition duration-300"
-              >
-                <img src={prod.image} alt={prod.title} className="h-[230px]" />
-
-                <div className="flex flex-col items-center gap-2">
-                  <h2>{prod.title}</h2>
-                  <p>Price : {prod.price}</p>
-                  <p>Quantity : {prod.quantity}</p>
-                </div>
-
-                <button
-                  onClick={() => dispatch(addToCart(prod))}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            );
-          })}
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <Navbar />
+      <section className="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">Our Products</h1>
+          {isAdmin && (
+            <button
+              onClick={() => navigate("/admin/products")}
+              className="bg-amber-400 hover:bg-amber-300 text-blue-950 font-bold px-4 py-2 rounded-lg shadow transition flex items-center gap-2"
+            >
+              <span>⚙️</span> Manage Products (Admin)
+            </button>
+          )}
         </div>
+
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+          </div>
+        ) : products.length === 0 ? (
+          <p className="text-center text-gray-500 py-10">No products available.</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((prod) => {
+              const id = prod._id || prod.id;
+              return (
+                <div
+                  key={id}
+                  className="bg-white p-4 rounded-xl shadow-md flex flex-col justify-between hover:shadow-lg transition duration-300 border border-gray-100"
+                >
+                  <div>
+                    <div className="h-48 overflow-hidden rounded-lg mb-3 bg-gray-50 flex items-center justify-center">
+                      <img
+                        src={prod.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"}
+                        alt={prod.title}
+                        className="h-full w-full object-cover hover:scale-105 transition duration-300"
+                        onError={(e) => {
+                          e.target.src = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500";
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1 mb-4">
+                      <h2 className="font-bold text-gray-800 text-lg line-clamp-1">{prod.title}</h2>
+                      <p className="text-gray-500 text-xs line-clamp-2">{prod.description}</p>
+                      <div className="flex justify-between items-center mt-2">
+                        <span className="font-extrabold text-blue-600 text-lg">${prod.price}</span>
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
+                          Stock: {prod.quantity}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <button
+                      onClick={() => dispatch(addToCart(prod))}
+                      className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                    >
+                      Add to Cart
+                    </button>
+
+                    {/* Admin Alone Controls */}
+                    {isAdmin && (
+                      <div className="flex gap-2 pt-1 border-t border-gray-100">
+                        <button
+                          onClick={() => navigate("/admin/products")}
+                          className="flex-1 bg-amber-100 text-amber-800 hover:bg-amber-200 font-semibold py-1.5 rounded-lg text-xs transition"
+                        >
+                          Edit (Admin)
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProduct(id)}
+                          className="flex-1 bg-red-100 text-red-800 hover:bg-red-200 font-semibold py-1.5 rounded-lg text-xs transition"
+                        >
+                          Delete (Admin)
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
       <Footer />
     </div>
