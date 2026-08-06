@@ -11,6 +11,9 @@ import axios from "axios";
 import { loginSuccess, logout } from "./features/user/userSlice";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import AdminRoute from "./Components/AdminRoute";
+import Checkout from "./Components/Checkout";
+import OrderPage from "./Components/OrderPage";
+import ProfilePage from "./Components/ProfilePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,10 +61,14 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element= {<Checkout />} />
+            <Route path="/orders" element={<OrderPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
           <Route element={<AdminRoute />}>
             <Route path="/admin/products" element={<AdminProducts />} />
+            <Route path="/admin/orders" element={<OrderPage />} />
           </Route>
           
         </Routes>

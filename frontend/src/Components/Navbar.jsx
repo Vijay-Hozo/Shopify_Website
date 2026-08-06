@@ -47,16 +47,36 @@ const Navbar = () => {
             Home
           </li>
 
+          {user && !isAdmin && (
+            <li 
+              onClick={() => navigate("/orders")} 
+              className={`cursor-pointer hover:text-blue-200 transition ${location.pathname === '/orders' ? 'underline font-semibold' : ''}`}
+            >
+              📦 My Orders
+            </li>
+          )}
+
           {/* Product button specifically for ADMIN alone */}
           {isAdmin && (
-            <li 
-              onClick={() => navigate("/admin/products")} 
-              className={`cursor-pointer bg-amber-400 hover:bg-amber-300 text-blue-950 px-3.5 py-1 rounded-lg font-bold transition flex items-center gap-1.5 shadow-sm ${
-                location.pathname === '/admin/products' ? 'ring-2 ring-white' : ''
-              }`}
-            >
-              <span>⚙️</span> Products (Admin)
-            </li>
+            <div className="flex items-center gap-2">
+              <div 
+                onClick={() => navigate("/admin/products")} 
+                className={`cursor-pointer bg-amber-400 hover:bg-amber-300 text-blue-950 px-3.5 py-1 rounded-lg font-bold transition flex items-center gap-1.5 shadow-sm ${
+                  location.pathname === '/admin/products' ? 'ring-2 ring-white' : ''
+                }`}
+              >
+                <span>⚙️</span> Products
+              </div>
+
+              <div 
+                onClick={() => navigate("/admin/orders")} 
+                className={`cursor-pointer bg-amber-400 hover:bg-amber-300 text-blue-950 px-3.5 py-1 rounded-lg font-bold transition flex items-center gap-1.5 shadow-sm ${
+                  location.pathname === '/admin/orders' ? 'ring-2 ring-white' : ''
+                }`}
+              >
+                <span>📦</span> Order Management
+              </div>
+            </div>
           )}
 
           <li 
@@ -86,8 +106,15 @@ const Navbar = () => {
           )}
 
           {user ? (
-            <div className="flex items-center bg-blue-700/60 px-3 py-1 rounded-lg border border-blue-400/30">
-              <span className="font-semibold text-sm max-w-[120px] truncate">
+            <div 
+              onClick={() => navigate("/profile")}
+              className={`flex items-center gap-1.5 bg-blue-700/80 hover:bg-blue-800 text-white px-3 py-1 rounded-lg border border-blue-400/40 cursor-pointer transition shadow-sm group ${
+                location.pathname === '/profile' ? 'ring-2 ring-white font-bold' : ''
+              }`}
+              title="View Profile"
+            >
+              <span className="text-xs">👤</span>
+              <span className="font-semibold text-sm max-w-[120px] truncate group-hover:underline">
                 {user.name || "User"}
               </span>
             </div>

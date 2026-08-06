@@ -81,6 +81,11 @@ const cartSlice = createSlice({
       );
       saveCartToLocalStorage(state.items);
     },
+
+    clearCart: (state) => {
+      state.items = [];
+      saveCartToLocalStorage(state.items);
+    },
   },
 });
 
@@ -90,6 +95,7 @@ export const {
   increaseQuantity,
   decreaseQuantity,
   clearItem,
+  clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
