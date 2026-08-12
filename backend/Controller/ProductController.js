@@ -1,4 +1,5 @@
 const Product = require("../Model/ProductModel");
+const { redisClient } = require("../Config/redis");
 
 const createProduct = async (req, res) => {
   try {
@@ -19,11 +20,27 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
   try {
+    const cachedProducts = await redisClient.get("products");
+
+    if (cachedProducts) {
+      console.log("Products fetched from Redis cache");
+      return res.status(200).json({
+        success: true,
+        message: "Products fetched successfully",
+        products: JSON.parse(cachedProducts),
+        source: "redis Cache",
+      });
+    }
+
     const products = await Product.find();
+
+    await redisClient.setEx("products", 60 * 5, JSON.stringify(products));
+
     res.status(200).json({
       success: true,
       message: "Products fetched successfully",
       products,
+      source: "MongoDB",
     });
   } catch (error) {
     res.status(500).json({

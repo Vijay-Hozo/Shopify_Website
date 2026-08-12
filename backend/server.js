@@ -6,6 +6,7 @@ const connectToDb = require("./Config/db");
 const productRoutes = require("./Routes/ProductRoute");
 const userRoutes = require("./Routes/UserRoute");
 const orderRoutes = require("./Routes/OrderRoute");
+const { connectRedis } = require("./Config/redis");
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.use("/", userRoutes);
 app.use("/", orderRoutes);
 
 connectToDb();
+connectRedis();
 app.get("/", (req, res) => {
   res.send("Welcome to the backend server!");
 });
