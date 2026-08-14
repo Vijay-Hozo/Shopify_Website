@@ -41,8 +41,8 @@ const OrderPage = () => {
     try {
       // Admin calls /getAllOrders, customer calls /getOrderById
       const endpoint = isAdmin
-        ? "http://localhost:3000/getAllOrders"
-        : "http://localhost:3000/getOrderById";
+        ? `${import.meta.env.VITE_BACKEND_URL}getAllOrders`
+        : `${import.meta.env.VITE_BACKEND_URL}getOrderById`;
 
       const res = await axios.get(endpoint, {
         headers: {
@@ -68,7 +68,7 @@ const OrderPage = () => {
     setUpdatingStatusId(orderId);
     try {
       const res = await axios.put(
-        `http://localhost:3000/updateOrderStatus/${orderId}`,
+        `${import.meta.env.VITE_BACKEND_URL}updateOrderStatus/${orderId}`,
         { status: newStatus },
         {
           headers: {
@@ -96,7 +96,7 @@ const OrderPage = () => {
     if (!window.confirm("Are you sure you want to delete this order record?")) return;
     setDeletingOrderId(orderId);
     try {
-      await axios.delete(`http://localhost:3000/deleteOrder/${orderId}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}deleteOrder/${orderId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

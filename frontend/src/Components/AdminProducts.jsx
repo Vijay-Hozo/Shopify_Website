@@ -19,7 +19,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       console.log("Fetching products...");
-      const resp = await axios.get("http://localhost:3000/products");
+      const resp = await axios.get(`${import.meta.env.VITE_BACKEND_URL}products`);
       console.log("Products fetched: ", resp);
       setProducts(resp.data.products || []);
     } catch (err) {
@@ -41,7 +41,7 @@ const AdminProducts = () => {
       if (editId) {
         // Edit existing product
         const response = await axios.put(
-          `http://localhost:3000/products/${editId}`,
+          `${import.meta.env.VITE_BACKEND_URL}products/${editId}`,
           {
             title,
             description,
@@ -63,7 +63,7 @@ const AdminProducts = () => {
       } else {
         // Add new product
         const response = await axios.post(
-          "http://localhost:3000/create",
+         `${import.meta.env.VITE_BACKEND_URL}create`,
           {
             title,
             description,
@@ -117,7 +117,7 @@ const AdminProducts = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await axios.delete(`http://localhost:3000/products/${id}`, {
+      const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}products/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

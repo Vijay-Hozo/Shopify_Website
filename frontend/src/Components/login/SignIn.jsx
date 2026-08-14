@@ -3,8 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../features/user/userSlice";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
+  console.log("google client id", import.meta.env.VITE_GOOGLE_CLIENT_ID);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
@@ -17,12 +20,31 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const handleGoogleLoginSuccess = async (credentialResponse) =>{
+    try{
+      const user = jwtDecode(credentialResponse.credential);
+      console.log("Google user info:", user);
+      dispatch(
+        loginSuccess({
+          token : credentialResponse.credential,
+          user : {
+            email: user.email,
+            name: user.name,
+          }
+        })
+      )
+      navigate("/", { replace: true });
+    }catch(error){
+      console.error("Google login failed:", error);
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/login", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}login`, {
         email,
         password,
       });
@@ -137,6 +159,15 @@ const SignIn = () => {
           } ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
         >
           {loading ? "Signing In..." : loginType === "admin" ? "Sign In as Admin" : "Sign In"}
+        </button>
+
+        <button>
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
         </button>
 
         <div className="my-5 flex items-center justify-between">

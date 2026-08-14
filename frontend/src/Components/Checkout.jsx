@@ -92,7 +92,7 @@ const Checkout = () => {
         paymentMethod,
       };
 
-      const res = await axios.post("http://localhost:3000/addOrder", addOrderPayload, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}addOrder`, addOrderPayload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
